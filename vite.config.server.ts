@@ -1,44 +1,26 @@
 import { defineConfig } from "vite";
 import path from "path";
 
-// Server build configuration
 export default defineConfig({
   build: {
-    lib: {
-      entry: path.resolve(__dirname, "server/node-build.ts"),
-      name: "server",
-      fileName: "production",
-      formats: ["es"],
-    },
-    outDir: "dist/server",
-    target: "node22",
     ssr: true,
+    target: "node18", // node22 also fine
+    outDir: "dist/server",
     rollupOptions: {
-      external: [
-        // Node.js built-ins
-        "fs",
-        "path",
-        "url",
-        "http",
-        "https",
-        "os",
-        "crypto",
-        "stream",
-        "util",
-        "events",
-        "buffer",
-        "querystring",
-        "child_process",
-        // External dependencies that should not be bundled
-        "express",
-        "cors",
-      ],
+      input: path.resolve(__dirname, "server/index.ts"), // 👈 this is your real entry
       output: {
-        format: "es",
-        entryFileNames: "[name].mjs",
+        entryFileNames: "node-build.mjs", // 👈 Netlify will use this file
+        format: "esm",
       },
+      external: [
+        // Node built-ins
+        "fs", "path", "url", "http", "https", "os", "crypto",
+        "stream", "util", "events", "buffer", "querystring", "child_process",
+        // External dependencies
+        "express", "cors",
+      ],
     },
-    minify: false, // Keep readable for debugging
+    minify: false,
     sourcemap: true,
   },
   resolve: {
