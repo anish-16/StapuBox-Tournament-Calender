@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "netlify/functions/api.ts",
+      "src": "dist/server/node-build.mjs",
       "use": "@vercel/node"
     },
     {
@@ -13,7 +13,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "netlify/functions/api.ts"
+      "dest": "dist/server/node-build.mjs"
     },
     {
       "src": "/(.*)",
